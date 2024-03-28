@@ -12,7 +12,8 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
 
-    function checkAndUpdatePermission($ability, $model, $message = null) {
+    //not used anymore
+    protected function checkAndUpdatePermission($ability, $model, $message = null) {
         if(Gate::denies($ability, $model)) {
             abort(403, 'You are not authorized to '. $message);
         }
