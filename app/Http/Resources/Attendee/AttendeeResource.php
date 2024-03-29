@@ -19,7 +19,7 @@ class AttendeeResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'user'=> $this->user->name
+            'attendee'=> $this->user->name
         ];
     }
 }
