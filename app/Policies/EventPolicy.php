@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Event;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class EventPolicy
 {
@@ -21,6 +20,7 @@ class EventPolicy
      */
     public function view(?User $user, Event $event): bool
     {
+
         return true;
     }
 
@@ -62,5 +62,11 @@ class EventPolicy
     public function forceDelete(User $user, Event $event): bool
     {
         //
+    }
+
+
+    public function addAttendee(User $user, Event $event, int $attendeeId)
+    {   
+        return $user->id === $event->user_id || $user->id === $attendeeId;
     }
 }

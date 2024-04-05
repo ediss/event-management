@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\AttendeeStored;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Attendee\StoreAttendeeRequest;
 use App\Http\Resources\Attendee\AttendeeResource;
 use App\Models\Attendee;
 use App\Models\Event;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class AttendeeController extends Controller
 {
@@ -29,11 +29,17 @@ class AttendeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Event $event)
+    public function store(StoreAttendeeRequest $request, Event $event)
     {
+
+        $this->authorize('add-attendee', [$event, $request->user_id]);
+
+
         $attendee = $event->attendees()->create([
-            'user_id' => Auth::user()->id
+            'user_id' => $request->user_id
         ]);
+
+        event(new AttendeeStored());
 
         return new AttendeeResource($attendee);
     }

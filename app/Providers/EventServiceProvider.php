@@ -2,10 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\AttendeeStored;
+use App\Events\EventStored;
+use App\Events\EventUpdated;
+use App\Listeners\ClearEventCache;
+use App\Listeners\NotifyUsersEventWasCreated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,6 +22,18 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        EventStored::class => [
+            ClearEventCache::class,
+            NotifyUsersEventWasCreated::class
+        ],
+
+        EventUpdated::class => [
+            ClearEventCache::class,
+        ],
+        AttendeeStored::class => [
+            ClearEventCache::class,
+        ]
     ];
 
     /**

@@ -26,11 +26,7 @@ class AttendeeTest extends TestCase
         ]);
     }
 
-    public function test_event_does_not_have_attendees()
-    {
-
-        // $user = $this->createUser();
-        // $event = $this->createEvent($this->user->id);
+    public function test_event_does_not_have_attendees(){
 
         $response = $this->getJson("api/events/{$this->event->id}/attendees");
 
@@ -39,11 +35,7 @@ class AttendeeTest extends TestCase
             ->assertJsonCount(0, 'data');
     }
 
-    public function test_event_has_10_attendees()
-    {
-        // $user = $this->createUser();
-        // $event = $this->createEvent($this->user->id);
-
+    public function test_event_has_10_attendees(){
         $attendees = User::factory()->count(10)->create();
 
         foreach ($attendees as $attendee) {
@@ -70,12 +62,7 @@ class AttendeeTest extends TestCase
             ->assertJsonCount(10, 'data');
     }
 
-    public function test_add_attendee_to_event_when_not_authenticated()
-    {
-
-        // $user = $this->createUser();
-        // $event = $this->createEvent($this->user->id);
-
+    public function test_add_attendee_to_event_when_not_authenticated(){
         $response = $this->postJson("api/events/{$this->event->id}/attendees", [
             'user_id' => 10,
         ]);
@@ -83,10 +70,7 @@ class AttendeeTest extends TestCase
         $response->assertUnauthorized();
     }
 
-    public function test_add_attendee_to_event_when_authenticated()
-    {
-        
-
+    public function test_add_attendee_to_event_when_authenticated(){
         $response = $this->actingAs($this->user)
             ->postJson("api/events/{$this->event->id}/attendees", [
                 'user_id' => $this->user->id,
@@ -99,7 +83,9 @@ class AttendeeTest extends TestCase
                 'attendee' => $this->user->name,
             ],
         ])
-            ->assertCreated();
+        ->assertCreated();
 
     }
+
+    //test delete attendee
 }
